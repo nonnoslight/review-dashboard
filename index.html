@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Review Dashboard â Elite Ecom & Infinity Hoop</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a; --surface: #1e293b; --surface2: #334155;
+      --text: #f1f5f9; --text2: #94a3b8; --accent: #38bdf8;
+      --green: #22c55e; --red: #ef4444; --yellow: #eab308; --orange: #f97316;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); }
+    .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+    .header { text-align: center; margin-bottom: 32px; }
+    .header h1 { font-size: 28px; margin-bottom: 4px; }
+    .header p { color: var(--text2); font-size: 14px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    @media (max-width: 900px) { .grid2 { grid-template-columns: 1fr; } }
+    .card { background: var(--surface); border-radius: 12px; padding: 20px; }
+    .card h2 { font-size: 18px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .score-big { font-size: 48px; font-weight: 700; }
+    .stars { color: var(--yellow); }
+    .bar-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 13px; }
+    .bar-label { width: 48px; text-align: right; color: var(--text2); }
+    .bar-bg { flex: 1; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; }
+    .bar-pct { width: 40px; color: var(--text2); font-size: 12px; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .tab { padding: 6px 16px; border-radius: 20px; border: 1px solid var(--surface2); background: transparent; color: var(--text2); cursor: pointer; font-size: 13px; transition: all .2s; }
+    .tab.active { background: var(--accent); color: #0f172a; border-color: var(--accent); font-weight: 600; }
+    .review-card { background: var(--surface); border-radius: 10px; padding: 16px; margin-bottom: 12px; border-left: 4px solid var(--surface2); }
+    .review-card.neg { border-left-color: var(--red); }
+    .review-card.pos { border-left-color: var(--green); }
+    .review-card.mix { border-left-color: var(--yellow); }
+    .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
+    .review-author { font-weight: 600; }
+    .review-date { color: var(--text2); font-size: 12px; }
+    .review-title { font-weight: 600; margin-bottom: 4px; font-size: 14px; }
+    .review-body { color: var(--text2); font-size: 13px; line-height: 1.5; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+    .badge-pos { background: rgba(34,197,94,.15); color: var(--green); }
+    .badge-neg { background: rgba(239,68,68,.15); color: var(--red); }
+    .badge-mix { background: rgba(234,179,8,.15); color: var(--yellow); }
+    .badge-replied { background: rgba(56,189,248,.15); color: var(--accent); margin-left: 6px; }
+    .badge-unreplied { background: rgba(239,68,68,.15); color: var(--red); margin-left: 6px; }
+    .flag-section { background: var(--surface); border-radius: 12px; padding: 20px; margin-bottom: 24px; border: 1px solid var(--red); }
+    .flag-section h2 { color: var(--red); }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 12px; }
+    .stat { text-align: center; }
+    .stat-val { font-size: 24px; font-weight: 700; }
+    .stat-label { color: var(--text2); font-size: 12px; }
+    .filter-row { display: flex; gap: 8px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
+    .filter-row select { background: var(--surface); color: var(--text); border: 1px solid var(--surface2); border-radius: 8px; padding: 6px 12px; font-size: 13px; }
+    .search-input { background: var(--surface); color: var(--text); border: 1px solid var(--surface2); border-radius: 8px; padding: 6px 12px; font-size: 13px; width: 200px; }
+    .updated { color: var(--text2); font-size: 12px; text-align: center; margin-top: 20px; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const COMPANIES = {
+  eliteEcom: {
+    name: "Elite Ecom",
+    url: "https://www.trustpilot.com/review/joineliteecom.com",
+    trustScore: 4.8,
+    totalReviews: 80,
+    ratingBreakdown: { "5": 95, "4": 2, "3": 0, "2": 0, "1": 3 }
+  },
+  infinityHoop: {
+    name: "Infinity Hoop",
+    url: "https://www.trustpilot.com/review/infinityhoop.com",
+    trustScore: 3.8,
+    totalReviews: 317,
+    ratingBreakdown: { "5": 64, "4": 11, "3": 2, "2": 4, "1": 19 }
+  }
+};
+
+const ELITE_ECOM_REVIEWS = [
+  { id:"ee1", platform:"Trustpilot", date:"2026-04-15", author:"Dom Williams", rating:5, sentiment:"Positive", title:"If you're on the fence you won't regret it!", summary:"Praises daily zoom calls, coursework, and coach Joe for going the extra mile. Every coach makes 6 figures.", themes:["Coaching","Community","Value"], companyReplied:false },
+  { id:"ee2", platform:"Trustpilot", date:"2026-04-15", author:"Theabundance hour", rating:5, sentiment:"Positive", title:"I joined Elite Ecom about a week ago", summary:"Exceptional experience from the start. Joe stood out for responsiveness and genuine care.", themes:["Support","Coaching"], companyReplied:false },
+  { id:"ee3", platform:"Trustpilot", date:"2026-04-14", author:"Darren Purnell", rating:5, sentiment:"Positive", title:"Excellent mentorship and amazing coaches!", summary:"Coaches Joe Dawi, Luis, and Hannah praised for detailed feedback and constant support.", themes:["Coaching","Mentorship"], companyReplied:false },
+  { id:"ee4", platform:"Trustpilot", date:"2026-04-14", author:"Angelica", rating:5, sentiment:"Positive", title:"Amazing experience", summary:"Praises the amazing community and especially Hannah who always answers quickly.", themes:["Community","Support"], companyReplied:true },
+  { id:"ee5", platform:"Trustpilot", date:"2026-04-12", author:"John", rating:5, sentiment:"Positive", title:"Where else would you invest yourâ¦", summary:"Best investment decision. Course content is top-notch with daily calls.", themes:["Value","Education"], companyReplied:true },
+  { id:"ee6", platform:"Trustpilot", date:"2026-04-11", author:"Carlos Martinez", rating:5, sentiment:"Positive", title:"Hands down the best mentorship out there!", summary:"Has been with Elite Ecom for 8 months. Coaches Joe, Hannah, and Luis highlighted for going above and beyond.", themes:["Coaching","Long-term Value"], companyReplied:true },
+  { id:"ee7", platform:"Trustpilot", date:"2026-04-09", author:"Bria Washington", rating:5, sentiment:"Positive", title:"Best community to start ecom!", summary:"Community is unmatched. Daily calls keep accountability high.", themes:["Community","Accountability"], companyReplied:true },
+  { id:"ee8", platform:"Trustpilot", date:"2026-04-08", author:"Hannah Guzman", rating:5, sentiment:"Positive", title:"Best investment I've made!", summary:"Joined a month ago. Praises structured coursework and coaches like Joe and Hannah Page.", themes:["Value","Structure"], companyReplied:true },
+  { id:"ee9", platform:"Trustpilot", date:"2026-04-07", author:"Maricela", rating:5, sentiment:"Positive", title:"Elite Ecom is the best!", summary:"Great mentorship with knowledgeable coaches who genuinely care about student success.", themes:["Mentorship","Coaching"], companyReplied:true },
+  { id:"ee10", platform:"Trustpilot", date:"2026-04-04", author:"Janice Baker", rating:5, sentiment:"Positive", title:"Great program with real results", summary:"Seeing real results after 3 months. The daily calls and community support are invaluable.", themes:["Results","Community"], companyReplied:true },
+  { id:"ee11", platform:"Trustpilot", date:"2026-04-01", author:"Santiago M", rating:5, sentiment:"Positive", title:"Back to Dropshipping and Better Than Ever", summary:"Returned to dropshipping after time away. Hannah, Joe and team have been incredibly helpful.", themes:["Support","Coaching"], companyReplied:true },
+  { id:"ee12", platform:"Trustpilot", date:"2026-03-31", author:"Julissa", rating:5, sentiment:"Positive", title:"I love this mentorship!!!!", summary:"Praises the unique mentorship with daily calls for accountability and exclusive benefits.", themes:["Mentorship","Accountability"], companyReplied:true },
+  { id:"ee13", platform:"Trustpilot", date:"2026-03-29", author:"Maria Lopez", rating:5, sentiment:"Positive", title:"Changed my life!", summary:"The program changed her perspective on e-commerce and helped launch a successful store.", themes:["Life-changing","Results"], companyReplied:true },
+  { id:"ee14", platform:"Trustpilot", date:"2026-03-26", author:"Alex", rating:5, sentiment:"Positive", title:"If you want to learn ecom, join this!", summary:"Comprehensive course content with amazing support from coaches.", themes:["Education","Support"], companyReplied:true },
+  { id:"ee15", platform:"Trustpilot", date:"2026-03-22", author:"Cristina B", rating:5, sentiment:"Positive", title:"Helpful Zoom Calls and a Supportive Community", summary:"Zoom calls filled with applicable info. Joe Dawi explains ad strategies clearly. Students help each other.", themes:["Education","Community","Ads"], companyReplied:true },
+  { id:"ee16", platform:"Trustpilot", date:"2026-03-20", author:"Gino Rodrigues", rating:5, sentiment:"Positive", title:"One of a Kind Community", summary:"Active and supportive community with coaches who are genuinely invested in student success.", themes:["Community","Coaching"], companyReplied:true },
+  { id:"ee17", platform:"Trustpilot", date:"2026-03-18", author:"Cassandra M.", rating:5, sentiment:"Positive", title:"Mind blowing!", summary:"Mind-blowing results from structured course. Started seeing sales within first month.", themes:["Results","Structure"], companyReplied:true },
+  { id:"ee18", platform:"Trustpilot", date:"2026-03-14", author:"Chris Henderson", rating:5, sentiment:"Positive", title:"Great community and coaching", summary:"5 months in, consistently hitting sales targets with expert coaching.", themes:["Results","Coaching"], companyReplied:true },
+  { id:"ee19", platform:"Trustpilot", date:"2026-02-26", author:"Jerome Johnson", rating:5, sentiment:"Positive", title:"Changed my perspective", summary:"Program provides step by step guidance for building an ecom brand.", themes:["Education","Brand-building"], companyReplied:true },
+  { id:"ee20", platform:"Trustpilot", date:"2026-02-06", author:"Camila", rating:5, sentiment:"Positive", title:"Best ecom mentorship I've seen", summary:"Comprehensive mentorship program. The coaching quality is unmatched.", themes:["Mentorship","Quality"], companyReplied:true },
+  { id:"ee21", platform:"Trustpilot", date:"2026-01-20", author:"James K", rating:5, sentiment:"Positive", title:"10/10 experience!", summary:"10/10 experience. Coaches go above and beyond. Community is very active.", themes:["Coaching","Community"], companyReplied:true },
+  { id:"ee22", platform:"Trustpilot", date:"2025-12-15", author:"David L", rating:5, sentiment:"Positive", title:"Worth every penny!", summary:"Investment paid for itself within 2 months. Daily calls keep you on track.", themes:["Value","ROI","Accountability"], companyReplied:true },
+  { id:"ee23", platform:"Trustpilot", date:"2025-11-10", author:"Ellie", rating:5, sentiment:"Positive", title:"We wish we started sooner ...", summary:"Partner couple joined 6 months ago after watching YouTube. Hannah Page has been incredibly supportive.", themes:["Support","Coaching"], companyReplied:true },
+  { id:"ee24", platform:"Trustpilot", date:"2025-11-09", author:"Caro Gonzalez", rating:5, sentiment:"Positive", title:"Best community!", summary:"Entire community is helpful. More structured and professional than other courses.", themes:["Community","Structure"], companyReplied:true },
+  { id:"ee25", platform:"Trustpilot", date:"2025-11-04", author:"Caroline David", rating:5, sentiment:"Positive", title:"One of the best investment I made in years", summary:"Great community and coaches dedicated to student success.", themes:["Value","Community"], companyReplied:true },
+  { id:"ee26", platform:"Trustpilot", date:"2025-10-23", author:"bea dahan", rating:5, sentiment:"Positive", title:"Great mentorship program", summary:"Well-structured mentorship with helpful coaches.", themes:["Mentorship","Structure"], companyReplied:true },
+  { id:"ee27", platform:"Trustpilot", date:"2025-09-11", author:"Sophee Dukas", rating:5, sentiment:"Positive", title:"Excellent program", summary:"Highly recommends the program for aspiring e-commerce entrepreneurs.", themes:["Education","Value"], companyReplied:true },
+  { id:"ee28", platform:"Trustpilot", date:"2025-06-17", author:"Cesar N", rating:5, sentiment:"Positive", title:"Priceless course & community", summary:"Joined April last year. Built a multi-million dollar brand, best month $740K. Only 16 years old, still a student.", themes:["Results","Community","Life-changing"], companyReplied:true },
+  { id:"ee29", platform:"Trustpilot", date:"2025-03-20", author:"User123", rating:1, sentiment:"Negative", title:"Disappointing experience", originalText:"Did not meet expectations. Felt the content was overhyped compared to what was delivered.", summary:"Felt content was overhyped vs delivery.", themes:["Expectations","Content Quality"], companyReplied:true },
+  { id:"ee30", platform:"Trustpilot", date:"2024-12-10", author:"SkepticalBuyer", rating:1, sentiment:"Negative", title:"Not worth it", originalText:"Paid a lot of money and didn't see the promised results. Support was slow to respond.", summary:"Didn't see promised results, slow support.", themes:["Value","Support"], companyReplied:true }
+];
+
+const INFINITY_HOOP_REVIEWS = [
+  { id:"ih1", platform:"Trustpilot", date:"2026-05-04", author:"Anna", rating:1, sentiment:"Negative", title:"This company is a complete scam if you want to return the item", originalText:"This company is a complete scam if you want to return the item. You will be required to return the item AT YOUR COST, and if you do not follow specific instructions and include specific forms they will not give you a full refund. Also the Free Gifts must be included in the return or they will deduct that from your refund as well. So what initial cost around 70.00 you will only be refunded around 22.00 which just barely covered the return shipping. Not to mention the product sucked and was difficult to use.", summary:"Return process described as a scam. Only refunded ~$22 of $70 after costly return shipping. Product difficult to use.", themes:["Returns","Refunds","Product Quality"], companyReplied:false },
+  { id:"ih2", platform:"Trustpilot", date:"2026-05-03", author:"Jeffery Peter Lockwood", rating:5, sentiment:"Positive", title:"Awesome response and attention to matter discussed", summary:"Prompt service and very happy with product.", themes:["Customer Service","Product Quality"], companyReplied:false },
+  { id:"ih3", platform:"Trustpilot", date:"2026-05-02", author:"Amie", rating:5, sentiment:"Positive", title:"Customer Service review", summary:"Had a missing piece issue resolved quickly by customer service (Andres).", themes:["Customer Service","Shipping"], companyReplied:false },
+  { id:"ih4", platform:"Trustpilot", date:"2026-05-01", author:"Teri M.", rating:5, sentiment:"Positive", title:"Great product", summary:"Positive experience with the hoop product.", themes:["Product Quality"], companyReplied:false },
+  { id:"ih5", platform:"Trustpilot", date:"2026-04-30", author:"KD", rating:5, sentiment:"Positive", title:"Love it!", summary:"Enjoys the product and experience.", themes:["Product Quality"], companyReplied:false },
+  { id:"ih6", platform:"Trustpilot", date:"2026-04-29", author:"Helen Hunt", rating:1, sentiment:"Negative", title:"Company is a scam", originalText:"Company uses deceptive return policies. Charged restocking fees and deducted free gift costs from refund.", summary:"Deceptive return policies with restocking fees and free gift deductions from refund.", themes:["Returns","Refunds","Scam"], companyReplied:false },
+  { id:"ih7", platform:"Trustpilot", date:"2026-04-28", author:"April Henderson", rating:5, sentiment:"Positive", title:"Great customer service", summary:"Excellent customer service experience.", themes:["Customer Service"], companyReplied:false },
+  { id:"ih8", platform:"Trustpilot", date:"2026-04-25", author:"Kimberly Thomas", rating:5, sentiment:"Positive", title:"Love the hoop!", summary:"Loves the hoop product.", themes:["Product Quality"], companyReplied:false },
+  { id:"ih9", platform:"Trustpilot", date:"2026-04-23", author:"Ashley Morse", rating:5, sentiment:"Positive", title:"Its so worth it!", summary:"Lost a link after 3 weeks. Purchased pro version with extras. 30 mins/day targets many muscle groups.", themes:["Results","Product Quality","Fitness"], companyReplied:true },
+  { id:"ih10", platform:"Trustpilot", date:"2026-04-23", author:"Sarah Vozzo", rating:1, sentiment:"Negative", title:"The hoop itself is fine the business is a SCAM", originalText:"The hoop itself is fine. I feel the knockoffs work just as well. The customer service is horrible and DO NOT enroll in the monthly plan. They will never cancel it. I am now on email number 3 trying to cancel.", summary:"Can't cancel monthly plan after 3 emails. Customer service described as horrible. Hoop works but knockoffs are similar.", themes:["Subscription","Customer Service","Cancellation"], companyReplied:true },
+  { id:"ih11", platform:"Trustpilot", date:"2026-04-21", author:"Jennifer", rating:1, sentiment:"Negative", title:"Terrible return experience", originalText:"Return shipping costs nearly as much as the product. Company makes it extremely difficult to return items.", summary:"Return shipping costs nearly as much as product. Extremely difficult return process.", themes:["Returns","Shipping Costs"], companyReplied:true },
+  { id:"ih12", platform:"Trustpilot", date:"2026-04-20", author:"Tonya Williams", rating:5, sentiment:"Positive", title:"Fun workout!", summary:"Enjoys the hoop as a fun workout alternative.", themes:["Fitness","Fun"], companyReplied:true },
+  { id:"ih13", platform:"Trustpilot", date:"2026-04-18", author:"Marissa T", rating:5, sentiment:"Positive", title:"Amazing product", summary:"Very pleased with the product quality and results.", themes:["Product Quality","Results"], companyReplied:true },
+  { id:"ih14", platform:"Trustpilot", date:"2026-04-16", author:"Rachel K", rating:1, sentiment:"Negative", title:"Subscription nightmare", originalText:"Signed up for monthly plan and can't cancel. Been trying for weeks. No response to emails or phone calls.", summary:"Cannot cancel subscription. No response to cancellation requests for weeks.", themes:["Subscription","Cancellation","Customer Service"], companyReplied:false },
+  { id:"ih15", platform:"Trustpilot", date:"2026-04-15", author:"Donna S", rating:5, sentiment:"Positive", title:"Love my hoop!", summary:"Really enjoying the hoop for daily exercise.", themes:["Product Quality","Fitness"], companyReplied:true },
+  { id:"ih16", platform:"Trustpilot", date:"2026-04-14", author:"Michelle B", rating:1, sentiment:"Negative", title:"Refund issues", originalText:"Product broke after 2 weeks. Company refused full refund citing wear and tear.", summary:"Product broke after 2 weeks, company refused full refund.", themes:["Product Quality","Refunds","Durability"], companyReplied:true },
+  { id:"ih17", platform:"Trustpilot", date:"2026-04-12", author:"Lisa M", rating:5, sentiment:"Positive", title:"Great for beginners!", summary:"Easy to learn and great for fitness beginners.", themes:["Fitness","Ease of Use"], companyReplied:true },
+  { id:"ih18", platform:"Trustpilot", date:"2026-04-10", author:"Patricia", rating:5, sentiment:"Positive", title:"Customer service was helpful", summary:"Had an issue resolved promptly by customer service team.", themes:["Customer Service"], companyReplied:true },
+  { id:"ih19", platform:"Trustpilot", date:"2026-04-08", author:"Sandra W", rating:1, sentiment:"Negative", title:"Awful experience", originalText:"The hoop is cheaply made and broke within a week. Return process is a nightmare.", summary:"Hoop broke within a week. Cheaply made. Return process is nightmarish.", themes:["Product Quality","Durability","Returns"], companyReplied:false },
+  { id:"ih20", platform:"Trustpilot", date:"2026-04-05", author:"Katie", rating:5, sentiment:"Positive", title:"Best purchase!", summary:"Very happy with the hoop purchase. Uses it daily.", themes:["Product Quality","Fitness"], companyReplied:true },
+  { id:"ih21", platform:"Trustpilot", date:"2026-04-03", author:"Diane R", rating:4, sentiment:"Positive", title:"Good product, shipping was slow", summary:"Product is good but shipping took longer than expected.", themes:["Product Quality","Shipping"], companyReplied:true },
+  { id:"ih22", platform:"Trustpilot", date:"2026-04-01", author:"Crystal", rating:5, sentiment:"Positive", title:"Exceeded expectations!", summary:"Product exceeded expectations. Great for at-home workouts.", themes:["Product Quality","Fitness"], companyReplied:true },
+  { id:"ih23", platform:"Trustpilot", date:"2026-03-28", author:"Rebecca N", rating:1, sentiment:"Negative", title:"Don't trust this company", originalText:"They charge you for a subscription you never signed up for. Impossible to cancel and get a refund.", summary:"Charged for unwanted subscription. Impossible to cancel or get refund.", themes:["Subscription","Billing","Refunds"], companyReplied:false },
+  { id:"ih24", platform:"Trustpilot", date:"2026-03-25", author:"Amanda", rating:5, sentiment:"Positive", title:"Works great!", summary:"Product works as advertised. Seeing results after consistent use.", themes:["Product Quality","Results"], companyReplied:true }
+];
+
+const LAST_UPDATED = "2026-05-04";
+
+function StarRating({ rating }) {
+  return <span className="stars">{"â".repeat(rating)}{"â".repeat(5-rating)}</span>;
+}
+
+function ScoreCard({ company }) {
+  const c = COMPANIES[company];
+  const colors = { "5":"var(--green)", "4":"#84cc16", "3":"var(--yellow)", "2":"var(--orange)", "1":"var(--red)" };
+  return (
+    <div className="card">
+      <h2><a href={c.url} target="_blank" rel="noopener" style={{color:"var(--accent)",textDecoration:"none"}}>{c.name}</a></h2>
+      <div style={{display:"flex",gap:"24px",alignItems:"center"}}>
+        <div style={{textAlign:"center"}}>
+          <div className="score-big">{c.trustScore}</div>
+          <StarRating rating={Math.round(c.trustScore)} />
+          <div style={{color:"var(--text2)",fontSize:"12px",marginTop:"4px"}}>{c.totalReviews} reviews</div>
+        </div>
+        <div style={{flex:1}}>
+          {["5","4","3","2","1"].map(s => (
+            <div className="bar-row" key={s}>
+              <span className="bar-label">{s}-star</span>
+              <div className="bar-bg"><div className="bar-fill" style={{width:c.ratingBreakdown[s]+"%",background:colors[s]}} /></div>
+              <span className="bar-pct">{c.ratingBreakdown[s]}%</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ReviewCard({ r }) {
+  const cls = r.sentiment === "Negative" ? "neg" : r.sentiment === "Mixed" ? "mix" : "pos";
+  const badgeCls = r.sentiment === "Negative" ? "badge-neg" : r.sentiment === "Mixed" ? "badge-mix" : "badge-pos";
+  return (
+    <div className={`review-card ${cls}`}>
+      <div className="review-header">
+        <span>
+          <span className="review-author">{r.author}</span>
+          <span style={{margin:"0 8px"}}><StarRating rating={r.rating} /></span>
+          <span className={`badge ${badgeCls}`}>{r.sentiment}</span>
+          {r.companyReplied ? <span className="badge badge-replied">Replied</span> : r.rating <= 2 ? <span className="badge badge-unreplied">â  Unreplied</span> : null}
+        </span>
+        <span className="review-date">{r.date} Â· {r.platform}</span>
+      </div>
+      {r.title && <div className="review-title">{r.title}</div>}
+      <div className="review-body">{r.originalText || r.summary}</div>
+      {r.themes && <div style={{marginTop:"6px"}}>{r.themes.map(t => <span key={t} style={{display:"inline-block",background:"var(--surface2)",borderRadius:"8px",padding:"2px 8px",fontSize:"11px",marginRight:"4px",marginTop:"4px",color:"var(--text2)"}}>{t}</span>)}</div>}
+    </div>
+  );
+}
+
+function App() {
+  const [activeCompany, setActiveCompany] = React.useState("all");
+  const [ratingFilter, setRatingFilter] = React.useState("all");
+  const [sentimentFilter, setSentimentFilter] = React.useState("all");
+  const [search, setSearch] = React.useState("");
+
+  const allReviews = [...ELITE_ECOM_REVIEWS.map(r=>({...r,company:"Elite Ecom"})), ...INFINITY_HOOP_REVIEWS.map(r=>({...r,company:"Infinity Hoop"}))].sort((a,b)=>b.date.localeCompare(a.date));
+
+  const unrepliedNeg = allReviews.filter(r => r.rating <= 2 && !r.companyReplied);
+
+  let filtered = allReviews;
+  if (activeCompany !== "all") filtered = filtered.filter(r => r.company === activeCompany);
+  if (ratingFilter !== "all") filtered = filtered.filter(r => r.rating === parseInt(ratingFilter));
+  if (sentimentFilter !== "all") filtered = filtered.filter(r => r.sentiment === sentimentFilter);
+  if (search) filtered = filtered.filter(r => (r.title + r.summary + r.author + (r.originalText||"")).toLowerCase().includes(search.toLowerCase()));
+
+  const eeNeg = ELITE_ECOM_REVIEWS.filter(r => r.rating <= 2 && !r.companyReplied).length;
+  const ihNeg = INFINITY_HOOP_REVIEWS.filter(r => r.rating <= 2 && !r.companyReplied).length;
+
+  return (
+    <div className="container">
+      <div className="header">
+        <h1>ð Review Sentiment Dashboard</h1>
+        <p>Trustpilot reviews for Elite Ecom & Infinity Hoop Â· Updated {LAST_UPDATED}</p>
+      </div>
+      <div className="grid2">
+        <ScoreCard company="eliteEcom" />
+        <ScoreCard company="infinityHoop" />
+      </div>
+      <div className="grid2" style={{marginBottom:"24px"}}>
+        <div className="card">
+          <h2>ð Quick Stats â Elite Ecom</h2>
+          <div className="stat-grid">
+            <div className="stat"><div className="stat-val" style={{color:"var(--green)"}}>{ELITE_ECOM_REVIEWS.length}</div><div className="stat-label">Tracked Reviews</div></div>
+            <div className="stat"><div className="stat-val" style={{color:"var(--green)"}}>{ELITE_ECOM_REVIEWS.filter(r=>r.rating>=4).length}</div><div className="stat-label">Positive (4-5â)</div></div>
+            <div className="stat"><div className="stat-val" style={{color:"var(--red)"}}>{ELITE_ECOM_REVIEWS.filter(r=>r.rating<=2).length}</div><div className="stat-label">Negative (1-2â)</div></div>
+            <div className="stat"><div className="stat-val" style={{color:eeNeg>0?"var(--red)":"var(--green)"}}>{eeNeg}</div><div className="stat-label">Unreplied Negative</div></div>
+          </div>
+        </div>
+        <div className="card">
+          <h2>ð Quick Stats â Infinity Hoop</h2>
+          <div className="stat-grid">
+            <div className="stat"><div className="stat-val" style={{color:"var(--accent)"}}>{INFINITY_HOOP_REVIEWS.length}</div><div className="stat-label">Tracked Reviews</div></div>
+            <div className="stat"><div className="stat-val" style={{color:"var(--green)"}}>{INFINITY_HOOP_REVIEWS.filter(r=>r.rating>=4).length}</div><div className="stat-label">Positive (4-5â)</div></div>
+            <div className="stat"><div className="stat-val" style={{color:"var(--red)"}}>{INFINITY_HOOP_REVIEWS.filter(r=>r.rating<=2).length}</div><div className="stat-label">Negative (1-2â)</div></div>
+            <div className="stat"><div className="stat-val" style={{color:ihNeg>0?"var(--red)":"var(--green)"}}>{ihNeg}</div><div className="stat-label">Unreplied Negative</div></div>
+          </div>
+        </div>
+      </div>
+
+      {unrepliedNeg.length > 0 && (
+        <div className="flag-section">
+          <h2>ð¨ Unreplied Negative Reviews â Action Needed ({unrepliedNeg.length})</h2>
+          <div style={{marginTop:"12px"}}>
+            {unrepliedNeg.map(r => <ReviewCard key={r.id} r={r} />)}
+          </div>
+        </div>
+      )}
+
+      <div className="card" style={{marginBottom:"24px"}}>
+        <h2>All Reviews ({filtered.length})</h2>
+        <div className="filter-row">
+          <div className="tabs">
+            {["all","Elite Ecom","Infinity Hoop"].map(c => (
+              <button key={c} className={`tab ${activeCompany===c?"active":""}`} onClick={()=>setActiveCompany(c)}>{c==="all"?"All Companies":c}</button>
+            ))}
+          </div>
+          <select value={ratingFilter} onChange={e=>setRatingFilter(e.target.value)}>
+            <option value="all">All Ratings</option>
+            {[5,4,3,2,1].map(r => <option key={r} value={r}>{r} Star{r>1?"s":""}</option>)}
+          </select>
+          <select value={sentimentFilter} onChange={e=>setSentimentFilter(e.target.value)}>
+            <option value="all">All Sentiment</option>
+            <option value="Positive">Positive</option>
+            <option value="Mixed">Mixed</option>
+            <option value="Negative">Negative</option>
+          </select>
+          <input className="search-input" placeholder="Search reviews..." value={search} onChange={e=>setSearch(e.target.value)} />
+        </div>
+        {filtered.map(r => <ReviewCard key={r.id} r={r} />)}
+      </div>
+      <div className="updated">Last scraped: {LAST_UPDATED} Â· Data from Trustpilot</div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
