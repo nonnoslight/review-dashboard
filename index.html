@@ -69,14 +69,14 @@ const COMPANIES = {
     url: "https://www.trustpilot.com/review/joineliteecom.com",
     trustScore: 4.8,
     totalReviews: 93,
-    ratingBreakdown: { "5": 95, "4": 2, "3": 0, "2": 1, "1": 2
+    ratingBreakdown: { "5": 95, "4": 2, "3": 0, "2": 1, "1": 2 }
   },
   infinityHoop: {
     name: "Infinity Hoop",
     url: "https://www.trustpilot.com/review/infinityhoop.com",
     trustScore: 3.8,
     totalReviews: 374,
-    ratingBreakdown: { "5": 63, "4": 13, "3": 2, "2": 4, "1": 18
+    ratingBreakdown: { "5": 63, "4": 13, "3": 2, "2": 4, "1": 18 }
   }
 };
 
@@ -170,7 +170,7 @@ const INFINITY_HOOP_REVIEWS = [
   { id:"ih24", platform:"Trustpilot", date:"2026-03-25", author:"Amanda", rating:5, sentiment:"Positive", title:"Works great!", summary:"Product works as advertised. Seeing results after consistent use.", themes:["Product Quality","Results"], companyReplied:true }
 ];
 
-const LAST_UPDATED = "2026-05-04";
+const LAST_UPDATED = "2026-06-08";
 
 function StarRating({ rating }) {
   return <span className="stars">{"â".repeat(rating)}{"â".repeat(5-rating)}</span>;
