@@ -68,19 +68,20 @@ const COMPANIES = {
     name: "Elite Ecom",
     url: "https://www.trustpilot.com/review/joineliteecom.com",
     trustScore: 4.8,
-    totalReviews: 95,
+    totalReviews: 96,
     ratingBreakdown: { "5": 95, "4": 2, "3": 0, "2": 1, "1": 2 }
   },
   infinityHoop: {
     name: "Infinity Hoop",
     url: "https://www.trustpilot.com/review/infinityhoop.com",
     trustScore: 3.9,
-    totalReviews: 379,
+    totalReviews: 384,
     ratingBreakdown: { "5": 63, "4": 13, "3": 2, "2": 4, "1": 18 }
   }
 };
 
 const ELITE_ECOM_REVIEWS = [
+{ id:"ee46", platform:"Trustpilot", date:"2026-06-11", author:"Claudia Sofia", rating:5, sentiment:"Positive", title:"I give my experience 5 stars so far", summary:"Modules are well done with great info. Weekly calls offer one-on-one coaching.", themes:["Education","Coaching","Value"], companyReplied:false },
 { id:"ee44", platform:"Trustpilot", date:"2026-06-10", author:"Katarina Sestic", rating:5, sentiment:"Positive", title:"Amazing help from Rami with Facebook video ads", summary:"Praises Rami for help with Facebook video ads.", themes:["Coaching","Ads","Video Marketing"], url:"https://www.trustpilot.com/reviews/6a28e969e3225c8dece3f7ce", companyReplied:false },
 { id:"ee45", platform:"Trustpilot", date:"2026-06-10", author:"Dom Williams", rating:5, sentiment:"Positive", title:"Boosted sales 10x", summary:"Rami helped generate sales with AI structure knowledge. Personalized weekly zoom calls.", themes:["Coaching","AI","Sales"], url:"https://www.trustpilot.com/reviews/6a28a8503f6da17e55627a31", companyReplied:false },
   { id:"ee31", platform:"Trustpilot", date:"2026-06-03", author:"Dibora", rating:5, sentiment:"Positive", title:"Not a Video Ad Fan... Until I Learned From Rami", summary:"Working with Rami changed her perspective on video ads.", themes:["Coaching","Ads","Video Marketing"], companyReplied:true },
@@ -129,6 +130,11 @@ const ELITE_ECOM_REVIEWS = [
 ];
 
 const INFINITY_HOOP_REVIEWS = [
+{ id:"ih48", platform:"Trustpilot", date:"2026-06-12", author:"Jane", rating:5, sentiment:"Positive", title:"Quick response and refund for subscription", summary:"Unable to continue using hoop due to balance issues. Rose responded within minutes and arranged subscription refund.", themes:["Customer Service","Subscription","Refunds"], companyReplied:false },
+{ id:"ih49", platform:"Trustpilot", date:"2026-06-11", author:"Annie Amboy", rating:3, sentiment:"Mixed", title:"Additional charges", originalText:"The product is fine. Charges after purchase appear for $39.99. I contacted support and they did refund but this is sneaky and they need to stop as I have read multiple reviews of this issue.", summary:"Product is fine but surprise $39.99 subscription charge appeared. CS refunded but practice needs to stop.", themes:["Subscription","Billing","Customer Service"], companyReplied:false },
+{ id:"ih50", platform:"Trustpilot", date:"2026-06-11", author:"Gina S", rating:5, sentiment:"Positive", title:"Love the product", summary:"Loves the product. Didn't realize subscription was included but CS provided quick support and refund.", themes:["Product Quality","Subscription","Customer Service"], companyReplied:false },
+{ id:"ih51", platform:"Trustpilot", date:"2026-06-10", author:"Pam Perkins", rating:5, sentiment:"Positive", title:"I have been hooping for about 3 months", summary:"Hooping for 3 months. New website provides personalized workouts. Only needs 30 min/day.", themes:["Product Quality","Fitness","Website"], companyReplied:false },
+{ id:"ih52", platform:"Trustpilot", date:"2026-06-10", author:"dawn roberson", rating:5, sentiment:"Positive", title:"Arm hoop purchase", summary:"Arm hoop arrived on time. Seeing positive results for toning and weight loss. Recommends the company.", themes:["Product Quality","Shipping","Results"], companyReplied:false },
 { id:"ih42", platform:"Trustpilot", date:"2026-06-09", author:"Michele Urquhart", rating:4, sentiment:"Mixed", title:"I purchased the arm hoops", originalText:"I purchased the arm hoops. I love them. But then I received a charge for 39.99 for a subscription I didn't know about. Customer service was fantastic and resolved it.", summary:"Loves arm hoops but surprised by subscription charge. CS resolved well.", themes:["Subscription","Customer Service","Billing"], url:"https://www.trustpilot.com/reviews/6a28444c39fdb16bc4bbfc9f", companyReplied:false },
 { id:"ih43", platform:"Trustpilot", date:"2026-06-09", author:"JoAnn Harris", rating:5, sentiment:"Positive", title:"Best customer service", summary:"Contacted CS about unexpected charges, refunded within hours plus gift certificate.", themes:["Customer Service","Billing"], url:"https://www.trustpilot.com/reviews/6a2820edcdcbe0e9c87d8e10", companyReplied:false },
 { id:"ih44", platform:"Trustpilot", date:"2026-06-09", author:"Ice Marinich", rating:5, sentiment:"Positive", title:"Wonderful customer service", summary:"Subscription charge was a surprise but CS resolved it promptly.", themes:["Customer Service","Subscription"], url:"https://www.trustpilot.com/reviews/6a2820b46e66dd1886cf86c7", companyReplied:false },
@@ -178,7 +184,7 @@ const INFINITY_HOOP_REVIEWS = [
   { id:"ih24", platform:"Trustpilot", date:"2026-03-25", author:"Amanda", rating:5, sentiment:"Positive", title:"Works great!", summary:"Product works as advertised. Seeing results after consistent use.", themes:["Product Quality","Results"], companyReplied:true }
 ];
 
-const LAST_UPDATED = "2026-06-10";
+const LAST_UPDATED = "2026-06-12";
 
 function StarRating({ rating }) {
   return <span className="stars">{"â".repeat(rating)}{"â".repeat(5-rating)}</span>;
