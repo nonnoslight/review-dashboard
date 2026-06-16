@@ -11,7 +11,7 @@
     :root {
       --bg: #0f172a; --surface: #1e293b; --surface2: #334155;
       --text: #f1f5f9; --text2: #94a3b8; --accent: #38bdf8;
-      --green: #22c55e; --red: #ef4444; --yellow: #eab308; --orange: #f97316;
+      --green: #22c55e; --red: #ef4444; --yellow: #eab308; --orange:h #f97316;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); }
@@ -75,7 +75,7 @@ const COMPANIES = {
     name: "Infinity Hoop",
     url: "https://www.trustpilot.com/review/infinityhoop.com",
     trustScore: 3.9,
-    totalReviews: 384,
+    totalReviews: 388,
     ratingBreakdown: { "5": 63, "4": 13, "3": 2, "2": 4, "1": 18 }
   }
 };
@@ -130,6 +130,9 @@ const ELITE_ECOM_REVIEWS = [
 ];
 
 const INFINITY_HOOP_REVIEWS = [
+{ id:"ih55", platform:"Trustpilot", date:"2026-06-15", author:"Cheryl Kurucz", rating:5, sentiment:"Positive", title:"I enjoyed this workout because the flexible instructions!", summary:"Enjoyed the workout because the instructor allowed for different flexibility levels. Found it very enjoyable.", themes:["Fitness","Product Quality","Workout"], companyReplied:false },
+{ id:"ih54", platform:"Trustpilot", date:"2026-06-13", author:"Brittany", rating:5, sentiment:"Positive", title:"I reached out to customer service about subscription", summary:"Reached out to CS about a subscription issue. They responded quickly and were kind and helpful.", themes:["Customer Service","Subscription"], companyReplied:false },
+{ id:"ih53", platform:"Trustpilot", date:"2026-06-12", author:"Angela Williams", rating:4, sentiment:"Mixed", title:"I\'m happy with the product itself", originalText:"I\'m happy with the product itself, but was not aware that by purchasing it I would get a 39.99 fee every month for content I never signed up for. Customer service did help resolve the issue.", summary:"Happy with product but surprised by $39.99/month subscription charge. CS helped resolve.", themes:["Product Quality","Subscription","Billing","Customer Service"], companyReplied:true },
 { id:"ih48", platform:"Trustpilot", date:"2026-06-12", author:"Jane", rating:5, sentiment:"Positive", title:"Quick response and refund for subscription", summary:"Unable to continue using hoop due to balance issues. Rose responded within minutes and arranged subscription refund.", themes:["Customer Service","Subscription","Refunds"], companyReplied:false },
 { id:"ih49", platform:"Trustpilot", date:"2026-06-11", author:"Annie Amboy", rating:3, sentiment:"Mixed", title:"Additional charges", originalText:"The product is fine. Charges after purchase appear for $39.99. I contacted support and they did refund but this is sneaky and they need to stop as I have read multiple reviews of this issue.", summary:"Product is fine but surprise $39.99 subscription charge appeared. CS refunded but practice needs to stop.", themes:["Subscription","Billing","Customer Service"], companyReplied:false },
 { id:"ih50", platform:"Trustpilot", date:"2026-06-11", author:"Gina S", rating:5, sentiment:"Positive", title:"Love the product", summary:"Loves the product. Didn't realize subscription was included but CS provided quick support and refund.", themes:["Product Quality","Subscription","Customer Service"], companyReplied:false },
@@ -184,7 +187,7 @@ const INFINITY_HOOP_REVIEWS = [
   { id:"ih24", platform:"Trustpilot", date:"2026-03-25", author:"Amanda", rating:5, sentiment:"Positive", title:"Works great!", summary:"Product works as advertised. Seeing results after consistent use.", themes:["Product Quality","Results"], companyReplied:true }
 ];
 
-const LAST_UPDATED = "2026-06-12";
+const LAST_UPDATED = "2026-06-16";
 
 function StarRating({ rating }) {
   return <span className="stars">{"â".repeat(rating)}{"â".repeat(5-rating)}</span>;
